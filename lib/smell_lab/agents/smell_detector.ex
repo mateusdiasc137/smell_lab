@@ -12,12 +12,9 @@ defmodule SmellLab.Agents.SmellDetector do
 
     annotated = LineNumbers.annotate(code)
 
-    query = """
-    Elixir code smell analysis:
-    #{code}
-    """
+    query = build_retrieval_query(code)
 
-    smell_chunks = Index.search(:smells, query, 3)
+    smell_chunks = Index.search(:smells, query, 5)
     Logger.info("SmellDetector retrieved #{length(smell_chunks)} smell chunks")
 
     prompt = Prompts.smell_prompt(annotated, smell_chunks)
@@ -32,5 +29,17 @@ defmodule SmellLab.Agents.SmellDetector do
         Logger.error("SmellDetector LLM call failed: #{inspect(reason, pretty: true)}")
         error
     end
+  end
+
+  defp build_retrieval_query(code) do
+    """
+    Identify likely Elixir code smells for this code.
+    Focus on structural signs, process abstractions, module responsibilities,
+    control flow, state management, coupling, duplication, and misuse of Elixir abstractions.
+
+    Code:
+    #{code}
+    """
+    |> String.trim()
   end
 end

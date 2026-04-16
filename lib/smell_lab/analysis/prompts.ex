@@ -1,43 +1,43 @@
 defmodule SmellLab.Analysis.Prompts do
   def smell_prompt(code_with_lines, smell_chunks) do
     """
-    Você é um especialista em Elixir.
+    You are an Elixir expert.
 
-    Sua tarefa é decidir se o código abaixo contém UM code smell relevante.
+    Your task is to decide if the following code contains code smells.
 
-    Regras:
-    - use apenas os smells descritos no catálogo
-    - se não houver smell claro, retorne has_smell=false
-    - a localização deve apontar para as linhas mais relevantes
-    - seja conservador com falso positivo
+    Rules:
+    - use only the smells described in catalog.
+    - if you not sure if there is a smell, return has_smell=false.
+    - the location must point to the most relevant lines.
+    - be conservative with false positives
 
-    CATÁLOGO DE SMELLS:
+    SMELLS CATALOG:
     #{Enum.map_join(smell_chunks, "\n\n---\n\n", & &1.text)}
 
-    CÓDIGO:
+    CODE:
     #{code_with_lines}
     """
   end
 
   def refactor_prompt(original_code, detection, refactoring_chunks) do
     """
-    Você é um especialista em refatoração de Elixir.
+    You are an expert in refactoring in Elixir.
 
-    Smell detectado:
-    - nome: #{detection["smell_name"] || detection[:smell_name]}
-    - linhas: #{detection["start_line"] || detection[:start_line]}-#{detection["end_line"] || detection[:end_line]}
-    - explicação: #{detection["explanation"] || detection[:explanation]}
+    Smell detected:
+    - name: #{detection["smell_name"] || detection[:smell_name]}
+    - lines: #{detection["start_line"] || detection[:start_line]}-#{detection["end_line"] || detection[:end_line]}
+    - Explanation: #{detection["explanation"] || detection[:explanation]}
 
-    Regras:
-    - preserve o comportamento
-    - faça a menor mudança útil
-    - produza código idiomático em Elixir
-    - use apenas estratégias compatíveis com o catálogo
+    Rules:
+    - Preserve behavior.
+    - Make the least useful change.
+    - Produce idiomatic code in Elixir.
+    - Use only strategies compatible with the catalog.
 
-    CATÁLOGO DE REFATORAÇÕES:
+    REFACTORING CATALOG:
     #{Enum.map_join(refactoring_chunks, "\n\n---\n\n", & &1.text)}
 
-    CÓDIGO ORIGINAL:
+    ORIGINAL CODE:
     #{original_code}
     """
   end
