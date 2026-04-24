@@ -12,9 +12,12 @@ defmodule SmellLab.Agents.SmellDetector do
 
     annotated = LineNumbers.annotate(code)
 
-    query = build_retrieval_query(code)
+    query = String.trim(code)
 
-    smell_chunks = Index.search(:smells, query, 5)
+    smell_chunks =
+      Index.search(:smells, query, 5)
+      |> Enum.map(&format_smell_doc_for_prompt/1)
+
     Logger.info("SmellDetector retrieved #{length(smell_chunks)} smell chunks")
 
     prompt = Prompts.smell_prompt(annotated, smell_chunks)
@@ -31,15 +34,17 @@ defmodule SmellLab.Agents.SmellDetector do
     end
   end
 
-  defp build_retrieval_query(code) do
-    """
-    Identify likely Elixir code smells for this code.
-    Focus on structural signs, process abstractions, module responsibilities,
-    control flow, state management, coupling, duplication, and misuse of Elixir abstractions.
+  defp format_smell_doc_for_prompt(doc) do
+    %{
+      doc
+      | text: """
+      smell_id: #{doc.smell_id}
+      title: #{doc.title || doc.smell_id}
+      category: #{doc.category}
+      kind: #{doc.kind}
 
-    Code:
-    #{code}
-    """
-    |> String.trim()
+      #{doc.text}
+      """
+    }
   end
 end

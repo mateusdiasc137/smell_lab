@@ -3,33 +3,51 @@ defmodule SmellLab.Agents.Refactorer do
 
   alias SmellLab.Analysis.Prompts
   alias SmellLab.Analysis.Schemas
-  alias SmellLab.Retrieval.Index
   alias SmellLab.Llm.ReqLlmAdapter
+  alias SmellLab.Refactorings.Catalog
 
   def run(code, detection) when is_binary(code) and is_map(detection) do
     Logger.info("Refactorer.run started")
 
-    smell_name = detection[:smell_name] || detection["smell_name"] || "unknown"
+    smell_id = detection[:smell_id] || detection["smell_id"] || ""
 
-    query = """
-    Refactor Elixir code for smell #{smell_name}:
-    #{code}
-    """
+    if String.trim(smell_id) == "" do
+      {:error, :missing_smell_id}
+    else
+      with  {:ok, treatments_text} <- Catalog.prompt_text_for_smell(smell_id) do
+        Logger.info( "Refactorer resolved smell_id=#{smell_id}")
 
-    refactoring_chunks = Index.search(:refactorings, query, 3)
-    Logger.info("Refactorer retrieved #{length(refactoring_chunks)} refactoring chunks")
+        prompt = Prompts.refactor_prompt(code, detection, treatments_text)
+        Logger.info("Refactorer prompt size: #{String.length(prompt)} chars")
 
-    prompt = Prompts.refactor_prompt(code, detection, refactoring_chunks)
-    Logger.info("Refactorer prompt size: #{String.length(prompt)} chars")
+        case ReqLlmAdapter.generate_text(prompt) do
+          {:ok, refactored_code} ->
+            {:ok,
+            %{
+              summary: "Refatoração sugerida com base no tratamento selecionado.",
+              refactored_code: clean_code_output(refactored_code),
+              changed_regions: [],
+              warnings: []
+            }}
 
-    case ReqLlmAdapter.generate_object(prompt, Schemas.refactor_schema()) do
-      {:ok, _result} = ok ->
-        Logger.info("Refactorer LLM call finished successfully")
-        ok
-
-      {:error, reason} = error ->
-        Logger.error("Refactorer LLM call failed: #{inspect(reason, pretty: true)}")
-        error
+          {:error, reason} = error ->
+            error
+        end
+      else
+        {:error, reason} = error ->
+          Logger.error("Refactorer failed before LLM call: #{inspect(reason, pretty: true)}")
+          error
+      end
     end
   end
+
+  defp clean_code_output(text) do
+    text
+    |> String.trim()
+    |> String.replace(~r/\A```elixir\s*/s, "")
+    |> String.replace(~r/\A```\s*/s, "")
+    |> String.replace(~r/\s*```\z/s, "")
+    |> String.trim()
+  end
+
 end

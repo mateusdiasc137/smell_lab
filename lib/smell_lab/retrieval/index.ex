@@ -14,6 +14,11 @@ defmodule SmellLab.Retrieval.Index do
     GenServer.call(__MODULE__, {:search, index_name, query, k}, 60_000)
   end
 
+  @spec get_smell(binary()) :: any()
+  def get_smell(smell_id) when is_binary(smell_id) do
+    GenServer.call(__MODULE__, {:get_smell, smell_id}, 30_000)
+  end
+
   def reload do
     GenServer.call(__MODULE__, :reload, 60_000)
   end
@@ -83,6 +88,24 @@ defmodule SmellLab.Retrieval.Index do
     {:reply, [], state}
   end
 
+  def handle_call({:get_smell, _smell_id}, _from, %{ready?: false} = state) do
+    {:reply, {:error, :index_not_ready}, state}
+  end
+
+  def handle_call({:get_smell, smell_id}, _from, state) do
+    smell =
+      state.smells
+      |> Enum.filter(&(&1.smell_id == smell_id))
+      #|> Enum.sort_by(fn doc -> if doc.kind == "example", do: 0, else: 1 end)
+      |> List.first()
+
+    Logger.info("[info] get_smell reachead, list size: #{length(state.smells)}")
+    case smell do
+      nil -> {:reply, {:error, {:smell_not_found, smell_id}}, state}
+      doc -> {:reply, {:ok, doc}, state}
+    end
+  end
+
   def handle_call({:search, index_name, query, k}, _from, state) do
     docs = Map.get(state, index_name, [])
 
@@ -106,10 +129,11 @@ defmodule SmellLab.Retrieval.Index do
               |> Enum.take(k)
 
             Logger.info("Vector search ranking for #{index_name}:")
+
             Enum.with_index(results, 1)
             |> Enum.each(fn {doc, idx} ->
               Logger.info(
-                "  ##{idx} smell_id=#{doc.smell_id} kind=#{doc.kind} score=#{Float.round(doc.score, 6)} path=#{doc.path}"
+                "##{idx} smell_id=#{doc.smell_id} kind=#{doc.kind} score=#{Float.round(doc.score, 6)} path=#{doc.path}"
               )
             end)
 
@@ -149,8 +173,10 @@ defmodule SmellLab.Retrieval.Index do
        %{
          id: doc["id"],
          smell_id: doc["smell_id"],
+         title: doc["title"],
          kind: doc["kind"],
          category: doc["category"],
+         refactoring_pipeline: doc["refactoring_pipeline"] || [],
          path: doc["path"],
          text: doc["text"],
          embedding: doc["embedding"]

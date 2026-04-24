@@ -19,26 +19,35 @@ defmodule SmellLab.Analysis.Prompts do
     """
   end
 
-  def refactor_prompt(original_code, detection, refactoring_chunks) do
-    """
-    You are an expert in refactoring in Elixir.
+  def refactor_prompt(original_code, detection, treatments_text) do
+  """
+  You are an expert in refactoring Elixir code.
 
-    Smell detected:
-    - name: #{detection["smell_name"] || detection[:smell_name]}
-    - lines: #{detection["start_line"] || detection[:start_line]}-#{detection["end_line"] || detection[:end_line]}
-    - Explanation: #{detection["explanation"] || detection[:explanation]}
+  A code smell was detected:
+  - id: #{detection["smell_id"] || detection[:smell_id] || ""}
+  - name: #{detection["smell_name"] || detection[:smell_name]}
+  - lines: #{detection["start_line"] || detection[:start_line]}-#{detection["end_line"] || detection[:end_line]}
 
-    Rules:
-    - Preserve behavior.
-    - Make the least useful change.
-    - Produce idiomatic code in Elixir.
-    - Use only strategies compatible with the catalog.
+  Your task:
+  - choose the most appropriate treatment from the catalog
+  - apply it to the code
+  - preserve behavior
+  - make the smallest useful change
+  - produce idiomatic Elixir
 
-    REFACTORING CATALOG:
-    #{Enum.map_join(refactoring_chunks, "\n\n---\n\n", & &1.text)}
+  Rules:
+  - Return ONLY the final refactored Elixir code.
+  - Do NOT return JSON.
+  - Do NOT return markdown.
+  - Do NOT explain your reasoning.
+  - Do NOT include comments before or after the code.
+  - If no safe refactoring is possible, return the original code unchanged.
 
-    ORIGINAL CODE:
-    #{original_code}
-    """
-  end
+  Treatment catalog:
+  #{treatments_text}
+
+  Original code:
+  #{original_code}
+  """
+end
 end

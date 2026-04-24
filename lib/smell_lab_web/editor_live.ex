@@ -1,6 +1,7 @@
 defmodule SmellLabWeb.EditorLive do
   use SmellLabWeb, :live_view
 
+  require Logger
   alias SmellLab.Analysis.Pipeline
 
   @impl true
@@ -47,14 +48,15 @@ defmodule SmellLabWeb.EditorLive do
       <div class="col-span-1">
         <h2 class="font-bold mb-2">Detecção</h2>
 
-        <%= if @result && @result.detection do %>
+        <%= if detection = field(@result, :detection) do %>
           <div class="border rounded p-3 text-sm space-y-2">
-            <p><strong>Tem smell?</strong> <%= inspect(field(@result.detection, :has_smell)) %></p>
-            <p><strong>Smell:</strong> <%= field(@result.detection, :smell_name) %></p>
-            <p><strong>Confiança:</strong> <%= field(@result.detection, :confidence) %></p>
-            <p><strong>Linhas:</strong> <%= field(@result.detection, :start_line) %> - <%= field(@result.detection, :end_line) %></p>
+            <p><strong>Tem smell?</strong> <%= inspect(field(detection, :has_smell)) %></p>
+            <p><strong>Smell:</strong> <%= field(detection, :smell_name) %></p>
+            <p><strong>Smell ID:</strong> <%= field(detection, :smell_id) %></p>
+            <p><strong>Confiança:</strong> <%= field(detection, :confidence) %></p>
+            <p><strong>Linhas:</strong> <%= field(detection, :start_line) %> - <%= field(detection, :end_line) %></p>
             <p><strong>Explicação:</strong></p>
-            <pre class="whitespace-pre-wrap"><%= field(@result.detection, :explanation) %></pre>
+            <pre class="whitespace-pre-wrap"><%= field(detection, :explanation) %></pre>
           </div>
         <% else %>
           <div class="border rounded p-3 text-sm text-zinc-500">
@@ -66,16 +68,16 @@ defmodule SmellLabWeb.EditorLive do
       <div class="col-span-1">
         <h2 class="font-bold mb-2">Sugestão de refatoração</h2>
 
-        <%= if @result && @result.refactoring do %>
+        <%= if refactoring = field(@result, :refactoring) do %>
           <div class="border rounded p-3 text-sm space-y-3">
-            <%= if summary = field(@result.refactoring, :summary) do %>
+            <%= if summary = field(refactoring, :summary) do %>
               <div>
                 <p><strong>Resumo:</strong></p>
                 <pre class="whitespace-pre-wrap"><%= summary %></pre>
               </div>
             <% end %>
 
-            <%= if warnings = field(@result.refactoring, :warnings) do %>
+            <%= if warnings = field(refactoring, :warnings) do %>
               <div>
                 <p><strong>Avisos:</strong></p>
                 <pre class="whitespace-pre-wrap"><%= inspect(warnings, pretty: true) %></pre>
@@ -84,12 +86,12 @@ defmodule SmellLabWeb.EditorLive do
 
             <div>
               <p><strong>Código refatorado:</strong></p>
-              <pre class="border rounded p-3 mt-2 whitespace-pre-wrap font-mono text-sm"><%= field(@result.refactoring, :refactored_code) %></pre>
+              <pre class="border rounded p-3 mt-2 whitespace-pre-wrap font-mono text-sm"><%= field(refactoring, :refactored_code) %></pre>
             </div>
 
             <div>
               <p><strong>Debug do resultado bruto:</strong></p>
-              <pre class="border rounded p-3 mt-2 whitespace-pre-wrap text-xs"><%= inspect(@result.refactoring, pretty: true) %></pre>
+              <pre class="border rounded p-3 mt-2 whitespace-pre-wrap text-xs"><%= inspect(refactoring, pretty: true) %></pre>
             </div>
           </div>
         <% else %>
@@ -122,10 +124,13 @@ defmodule SmellLabWeb.EditorLive do
 
   @impl true
   def handle_async(:analysis, {:ok, {:ok, result}}, socket) do
+    normalized = normalize_result(result)
+    Logger.info("EditorLive normalized result: #{inspect(normalized, pretty: true)}")
+
     {:noreply,
      socket
      |> assign(:loading, false)
-     |> assign(:result, normalize_result(result))
+     |> assign(:result, normalized)
      |> assign(:error, nil)}
   end
 
@@ -146,6 +151,13 @@ defmodule SmellLabWeb.EditorLive do
   end
 
   defp normalize_result(%{detection: detection, refactoring: refactoring}) do
+    %{
+      detection: normalize_map(detection),
+      refactoring: normalize_map(refactoring)
+    }
+  end
+
+  defp normalize_result(%{"detection" => detection, "refactoring" => refactoring}) do
     %{
       detection: normalize_map(detection),
       refactoring: normalize_map(refactoring)

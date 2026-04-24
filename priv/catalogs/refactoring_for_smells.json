@@ -1,0 +1,1272 @@
+{
+  "smells": [
+    {
+      "smell_id": "genserver_envy",
+      "treatments": [
+        {
+          "id": "genserver_envy_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "generalise_a_process_abstraction",
+            "introduce_processes",
+            "register_a_process",
+            "remove_dead_code"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "agent_obsession",
+      "treatments": [
+        {
+          "id": "agent_obsession_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "generalise_a_function_definition",
+            "moving_a_definition",
+            "add_or_remove_a_parameter"
+          ]
+        },
+        {
+          "id": "agent_obsession_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "behaviour_extraction"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "unsupervised_process",
+      "treatments": [
+        {
+          "id": "unsupervised_process_treatment_1",
+          "label": "treatment_1",
+          "type": "single",
+          "steps": [
+            "moving_error_handling_mechanisms_to_supervision_trees"
+          ]
+        },
+        {
+          "id": "unsupervised_process_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "moving_a_definition"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "large_messages",
+      "treatments": [
+        {
+          "id": "large_messages_treatment_1",
+          "label": "treatment_1",
+          "type": "single",
+          "steps": [
+            "defining_a_subset_of_a_map"
+          ]
+        },
+        {
+          "id": "large_messages_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "extract_expressions"
+          ]
+        },
+        {
+          "id": "large_messages_treatment_3",
+          "label": "treatment_3",
+          "type": "single",
+          "steps": [
+            "add_a_tag_to_messages"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "unrelated_multi_clause_function",
+      "treatments": [
+        {
+          "id": "unrelated_multi_clause_function_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "rename_an_identifier",
+            "function_clauses_to_from_case_clauses"
+          ]
+        },
+        {
+          "id": "unrelated_multi_clause_function_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "moving_a_definition"
+          ]
+        },
+        {
+          "id": "unrelated_multi_clause_function_treatment_3",
+          "label": "treatment_3",
+          "type": "single",
+          "steps": [
+            "struct_guard_to_matching"
+          ]
+        },
+        {
+          "id": "unrelated_multi_clause_function_treatment_4",
+          "label": "treatment_4",
+          "type": "single",
+          "steps": [
+            "equality_guard_to_pattern_matching"
+          ]
+        },
+        {
+          "id": "unrelated_multi_clause_function_treatment_5",
+          "label": "treatment_5",
+          "type": "single",
+          "steps": [
+            "simplifying_guard_sequences"
+          ]
+        },
+        {
+          "id": "unrelated_multi_clause_function_treatment_6",
+          "label": "treatment_6",
+          "type": "single",
+          "steps": [
+            "converts_guards_to_conditionals"
+          ]
+        },
+        {
+          "id": "unrelated_multi_clause_function_treatment_7",
+          "label": "treatment_7",
+          "type": "single",
+          "steps": [
+            "simplifying_pattern_matching_with_nested_structs"
+          ]
+        },
+        {
+          "id": "unrelated_multi_clause_function_treatment_8",
+          "label": "treatment_8",
+          "type": "single",
+          "steps": [
+            "remove_unnecessary_calls_to_length_1"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "complex_extractions_in_clauses",
+      "treatments": [
+        {
+          "id": "complex_extractions_in_clauses_treatment_1",
+          "label": "treatment_1",
+          "type": "single",
+          "steps": [
+            "simplifying_pattern_matching_with_nested_structs"
+          ]
+        },
+        {
+          "id": "complex_extractions_in_clauses_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "converts_guards_to_conditionals"
+          ]
+        },
+        {
+          "id": "complex_extractions_in_clauses_treatment_3",
+          "label": "treatment_3",
+          "type": "single",
+          "steps": [
+            "equality_guard_to_pattern_matching"
+          ]
+        },
+        {
+          "id": "complex_extractions_in_clauses_treatment_4",
+          "label": "treatment_4",
+          "type": "single",
+          "steps": [
+            "struct_guard_to_matching"
+          ]
+        },
+        {
+          "id": "complex_extractions_in_clauses_treatment_5",
+          "label": "treatment_5",
+          "type": "single",
+          "steps": [
+            "remove_unnecessary_calls_to_length_1"
+          ]
+        },
+        {
+          "id": "complex_extractions_in_clauses_treatment_6",
+          "label": "treatment_6",
+          "type": "single",
+          "steps": [
+            "function_clauses_to_from_case_clauses"
+          ]
+        },
+        {
+          "id": "complex_extractions_in_clauses_treatment_7",
+          "label": "treatment_7",
+          "type": "pipeline",
+          "steps": [
+            "introduce_a_temporary_duplicate_definition",
+            "temporary_variable_elimination"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "using_exceptions_for_control_flow",
+      "treatments": [
+        {
+          "id": "using_exceptions_for_control_flow_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "rename_an_identifier",
+            "introduce_a_temporary_duplicate_definition",
+            "folding_against_a_function_definition"
+          ]
+        },
+        {
+          "id": "using_exceptions_for_control_flow_treatment_2",
+          "label": "treatment_2",
+          "type": "pipeline",
+          "steps": [
+            "introduce_processes",
+            "moving_error_handling_mechanisms_to_supervision_trees"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "untested_polymorphic_behaviors",
+      "treatments": [
+        {
+          "id": "untested_polymorphic_behaviors_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "introduce_overloading",
+            "folding_against_a_function_definition"
+          ]
+        },
+        {
+          "id": "untested_polymorphic_behaviors_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "typing_parameters_and_return_values"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "code_organization_by_process",
+      "treatments": [
+        {
+          "id": "code_organization_by_process_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "remove_processes",
+            "remove_dead_code"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "large_code_generation_by_macros",
+      "treatments": [
+        {
+          "id": "large_code_generation_by_macros_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "extract_function",
+            "moving_a_definition"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "data_manipulation_by_migration",
+      "treatments": [
+        {
+          "id": "data_manipulation_by_migration_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "splitting_a_large_module",
+            "rename_an_identifier",
+            "extract_function",
+            "moving_a_definition",
+            "remove_dead_code"
+          ]
+        },
+        {
+          "id": "data_manipulation_by_migration_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "simplifying_ecto_schema_fields_validation"
+          ]
+        },
+        {
+          "id": "data_manipulation_by_migration_treatment_3",
+          "label": "treatment_3",
+          "type": "single",
+          "steps": [
+            "pipeline_for_database_transactions"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "using_app_configuration_for_libraries",
+      "treatments": [
+        {
+          "id": "using_app_configuration_for_libraries_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "add_or_remove_a_parameter",
+            "typing_parameters_and_return_values"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "compile_time_global_configuration",
+      "treatments": [
+        {
+          "id": "compile_time_global_configuration_treatment_1",
+          "label": "treatment_1",
+          "type": "single",
+          "steps": [
+            "extract_constant"
+          ]
+        },
+        {
+          "id": "compile_time_global_configuration_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "introduce_a_temporary_duplicate_definition"
+          ]
+        },
+        {
+          "id": "compile_time_global_configuration_treatment_3",
+          "label": "treatment_3",
+          "type": "pipeline",
+          "steps": [
+            "folding_against_a_function_definition",
+            "remove_dead_code"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "use_instead_of_import",
+      "treatments": [
+        {
+          "id": "use_instead_of_import_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "introduce_import",
+            "remove_dead_code"
+          ]
+        },
+        {
+          "id": "use_instead_of_import_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "alias_expansion"
+          ]
+        },
+        {
+          "id": "use_instead_of_import_treatment_3",
+          "label": "treatment_3",
+          "type": "single",
+          "steps": [
+            "remove_import_attributes"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "low_level_concerns_smells",
+      "treatments": [
+        {
+          "id": "low_level_concerns_smells_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "typing_parameters_and_return_values",
+            "add_type_declarations_and_contracts"
+          ]
+        },
+        {
+          "id": "low_level_concerns_smells_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "introduce_pattern_matching_over_a_parameter"
+          ]
+        },
+        {
+          "id": "low_level_concerns_smells_treatment_3",
+          "label": "treatment_3",
+          "type": "single",
+          "steps": [
+            "struct_guard_to_matching"
+          ]
+        },
+        {
+          "id": "low_level_concerns_smells_treatment_4",
+          "label": "treatment_4",
+          "type": "single",
+          "steps": [
+            "simplifying_guard_sequences"
+          ]
+        },
+        {
+          "id": "low_level_concerns_smells_treatment_5",
+          "label": "treatment_5",
+          "type": "single",
+          "steps": [
+            "converts_guards_to_conditionals"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "complex_branching",
+      "treatments": [
+        {
+          "id": "complex_branching_treatment_1",
+          "label": "treatment_1",
+          "type": "single",
+          "steps": [
+            "extract_function"
+          ]
+        },
+        {
+          "id": "complex_branching_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "introduce_pattern_matching_over_a_parameter"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "complex_else_clauses_in_with",
+      "treatments": [
+        {
+          "id": "complex_else_clauses_in_with_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "extract_function",
+            "remove_dead_code"
+          ]
+        },
+        {
+          "id": "complex_else_clauses_in_with_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "remove_redundant_last_clause_in_with"
+          ]
+        },
+        {
+          "id": "complex_else_clauses_in_with_treatment_3",
+          "label": "treatment_3",
+          "type": "single",
+          "steps": [
+            "moving_with_clauses_without_pattern_matching"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "alternative_return_types",
+      "treatments": [
+        {
+          "id": "alternative_return_types_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "introduce_a_temporary_duplicate_definition",
+            "rename_an_identifier",
+            "add_or_remove_a_parameter",
+            "typing_parameters_and_return_values",
+            "remove_dead_code"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "accessing_non_existent_map_struct_fields",
+      "treatments": [
+        {
+          "id": "accessing_non_existent_map_struct_fields_treatment_1",
+          "label": "treatment_1",
+          "type": "single",
+          "steps": [
+            "default_value_for_an_absent_key_in_a_map"
+          ]
+        },
+        {
+          "id": "accessing_non_existent_map_struct_fields_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "introduce_pattern_matching_over_a_parameter"
+          ]
+        },
+        {
+          "id": "accessing_non_existent_map_struct_fields_treatment_3",
+          "label": "treatment_3",
+          "type": "single",
+          "steps": [
+            "simplifying_checks_by_using_truthness_condition"
+          ]
+        },
+        {
+          "id": "accessing_non_existent_map_struct_fields_treatment_4",
+          "label": "treatment_4",
+          "type": "single",
+          "steps": [
+            "explicit_a_double_boolean_negation"
+          ]
+        },
+        {
+          "id": "accessing_non_existent_map_struct_fields_treatment_5",
+          "label": "treatment_5",
+          "type": "pipeline",
+          "steps": [
+            "struct_field_access_elimination",
+            "equality_guard_to_pattern_matching"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "speculative_assumptions",
+      "treatments": [
+        {
+          "id": "speculative_assumptions_treatment_1",
+          "label": "treatment_1",
+          "type": "single",
+          "steps": [
+            "introduce_pattern_matching_over_a_parameter"
+          ]
+        },
+        {
+          "id": "speculative_assumptions_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "pipeline_using_with"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "modules_with_identical_names",
+      "treatments": [
+        {
+          "id": "modules_with_identical_names_treatment_1",
+          "label": "treatment_1",
+          "type": "single",
+          "steps": [
+            "rename_an_identifier"
+          ]
+        },
+        {
+          "id": "modules_with_identical_names_treatment_2",
+          "label": "treatment_2",
+          "type": "pipeline",
+          "steps": [
+            "introduce_a_temporary_duplicate_definition",
+            "remove_dead_code"
+          ]
+        },
+        {
+          "id": "modules_with_identical_names_treatment_3",
+          "label": "treatment_3",
+          "type": "single",
+          "steps": [
+            "move_file"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "unnecessary_macros",
+      "treatments": [
+        {
+          "id": "unnecessary_macros_treatment_1",
+          "label": "treatment_1",
+          "type": "single",
+          "steps": [
+            "inline_macro"
+          ]
+        },
+        {
+          "id": "unnecessary_macros_treatment_2",
+          "label": "treatment_2",
+          "type": "pipeline",
+          "steps": [
+            "extract_function",
+            "moving_a_definition"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "dynamic_atom_creation",
+      "treatments": [
+        {
+          "id": "dynamic_atom_creation_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "extract_function",
+            "introduce_pattern_matching_over_a_parameter"
+          ]
+        },
+        {
+          "id": "dynamic_atom_creation_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "folding_against_a_function_definition"
+          ]
+        },
+        {
+          "id": "dynamic_atom_creation_treatment_3",
+          "label": "treatment_3",
+          "type": "pipeline",
+          "steps": [
+            "introduce_a_temporary_duplicate_definition",
+            "remove_dead_code"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "comments",
+      "treatments": [
+        {
+          "id": "comments_treatment_1",
+          "label": "treatment_1",
+          "type": "single",
+          "steps": [
+            "extract_function"
+          ]
+        },
+        {
+          "id": "comments_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "extract_expressions"
+          ]
+        },
+        {
+          "id": "comments_treatment_3",
+          "label": "treatment_3",
+          "type": "single",
+          "steps": [
+            "extract_constant"
+          ]
+        },
+        {
+          "id": "comments_treatment_4",
+          "label": "treatment_4",
+          "type": "single",
+          "steps": [
+            "rename_an_identifier"
+          ]
+        },
+        {
+          "id": "comments_treatment_5",
+          "label": "treatment_5",
+          "type": "single",
+          "steps": [
+            "typing_parameters_and_return_values"
+          ]
+        },
+        {
+          "id": "comments_treatment_6",
+          "label": "treatment_6",
+          "type": "single",
+          "steps": [
+            "add_type_declarations_and_contracts"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "long_parameter_list",
+      "treatments": [
+        {
+          "id": "long_parameter_list_treatment_1",
+          "label": "treatment_1",
+          "type": "single",
+          "steps": [
+            "add_or_remove_a_parameter"
+          ]
+        },
+        {
+          "id": "long_parameter_list_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "reorder_parameter"
+          ]
+        },
+        {
+          "id": "long_parameter_list_treatment_3",
+          "label": "treatment_3",
+          "type": "pipeline",
+          "steps": [
+            "grouping_parameters_in_tuple",
+            "from_tuple_to_struct"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "long_function",
+      "treatments": [
+        {
+          "id": "long_function_treatment_1",
+          "label": "treatment_1",
+          "type": "single",
+          "steps": [
+            "extract_function"
+          ]
+        },
+        {
+          "id": "long_function_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "transform_nested_if_statements_into_a_cond"
+          ]
+        },
+        {
+          "id": "long_function_treatment_3",
+          "label": "treatment_3",
+          "type": "single",
+          "steps": [
+            "folding_against_a_function_definition"
+          ]
+        },
+        {
+          "id": "long_function_treatment_4",
+          "label": "treatment_4",
+          "type": "single",
+          "steps": [
+            "remove_dead_code"
+          ]
+        },
+        {
+          "id": "long_function_treatment_5",
+          "label": "treatment_5",
+          "type": "single",
+          "steps": [
+            "simplifying_checks_by_using_truthness_condition"
+          ]
+        },
+        {
+          "id": "long_function_treatment_6",
+          "label": "treatment_6",
+          "type": "single",
+          "steps": [
+            "generalise_a_function_definition"
+          ]
+        },
+        {
+          "id": "long_function_treatment_7",
+          "label": "treatment_7",
+          "type": "single",
+          "steps": [
+            "introduce_pattern_matching_over_a_parameter"
+          ]
+        },
+        {
+          "id": "long_function_treatment_8",
+          "label": "treatment_8",
+          "type": "single",
+          "steps": [
+            "replace_pipeline_with_a_function"
+          ]
+        },
+        {
+          "id": "long_function_treatment_9",
+          "label": "treatment_9",
+          "type": "single",
+          "steps": [
+            "default_value_for_an_absent_key_in_a_map"
+          ]
+        },
+        {
+          "id": "long_function_treatment_10",
+          "label": "treatment_10",
+          "type": "single",
+          "steps": [
+            "defining_a_subset_of_a_map"
+          ]
+        },
+        {
+          "id": "long_function_treatment_11",
+          "label": "treatment_11",
+          "type": "single",
+          "steps": [
+            "pipeline_using_with"
+          ]
+        },
+        {
+          "id": "long_function_treatment_12",
+          "label": "treatment_12",
+          "type": "single",
+          "steps": [
+            "remove_redundant_last_clause_in_with"
+          ]
+        },
+        {
+          "id": "long_function_treatment_13",
+          "label": "treatment_13",
+          "type": "single",
+          "steps": [
+            "modifying_keys_in_a_map"
+          ]
+        },
+        {
+          "id": "long_function_treatment_14",
+          "label": "treatment_14",
+          "type": "single",
+          "steps": [
+            "remove_nested_conditional_statements_in_function_calls"
+          ]
+        },
+        {
+          "id": "long_function_treatment_15",
+          "label": "treatment_15",
+          "type": "single",
+          "steps": [
+            "splitting_a_definition"
+          ]
+        },
+        {
+          "id": "long_function_treatment_16",
+          "label": "treatment_16",
+          "type": "single",
+          "steps": [
+            "merging_match_expressions_into_a_list_pattern"
+          ]
+        },
+        {
+          "id": "long_function_treatment_17",
+          "label": "treatment_17",
+          "type": "pipeline",
+          "steps": [
+            "convert_nested_conditionals_to_pipeline",
+            "replace_function_call_with_raw_value_in_a_pipeline_start"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "primitive_obsession",
+      "treatments": [
+        {
+          "id": "primitive_obsession_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "grouping_parameters_in_tuple",
+            "from_tuple_to_struct"
+          ]
+        },
+        {
+          "id": "primitive_obsession_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "add_type_declarations_and_contracts"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "shotgun_surgery",
+      "treatments": [
+        {
+          "id": "shotgun_surgery_treatment_1",
+          "label": "treatment_1",
+          "type": "single",
+          "steps": [
+            "moving_a_definition"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "duplicated_code",
+      "treatments": [
+        {
+          "id": "duplicated_code_treatment_1",
+          "label": "treatment_1",
+          "type": "single",
+          "steps": [
+            "defining_a_subset_of_a_map"
+          ]
+        },
+        {
+          "id": "duplicated_code_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "modifying_keys_in_a_map"
+          ]
+        },
+        {
+          "id": "duplicated_code_treatment_3",
+          "label": "treatment_3",
+          "type": "single",
+          "steps": [
+            "folding_against_a_function_definition"
+          ]
+        },
+        {
+          "id": "duplicated_code_treatment_4",
+          "label": "treatment_4",
+          "type": "single",
+          "steps": [
+            "extract_expressions"
+          ]
+        },
+        {
+          "id": "duplicated_code_treatment_5",
+          "label": "treatment_5",
+          "type": "single",
+          "steps": [
+            "extract_function"
+          ]
+        },
+        {
+          "id": "duplicated_code_treatment_6",
+          "label": "treatment_6",
+          "type": "single",
+          "steps": [
+            "reducing_a_boolean_equality_expression"
+          ]
+        },
+        {
+          "id": "duplicated_code_treatment_7",
+          "label": "treatment_7",
+          "type": "single",
+          "steps": [
+            "generalise_a_function_definition"
+          ]
+        },
+        {
+          "id": "duplicated_code_treatment_8",
+          "label": "treatment_8",
+          "type": "single",
+          "steps": [
+            "turning_anonymous_into_local_functions"
+          ]
+        },
+        {
+          "id": "duplicated_code_treatment_9",
+          "label": "treatment_9",
+          "type": "single",
+          "steps": [
+            "merging_multiple_definitions"
+          ]
+        },
+        {
+          "id": "duplicated_code_treatment_10",
+          "label": "treatment_10",
+          "type": "single",
+          "steps": [
+            "move_expression_out_of_case"
+          ]
+        },
+        {
+          "id": "duplicated_code_treatment_11",
+          "label": "treatment_11",
+          "type": "single",
+          "steps": [
+            "remove_redundant_last_clause_in_with"
+          ]
+        },
+        {
+          "id": "duplicated_code_treatment_12",
+          "label": "treatment_12",
+          "type": "single",
+          "steps": [
+            "static_structure_reuse"
+          ]
+        },
+        {
+          "id": "duplicated_code_treatment_13",
+          "label": "treatment_13",
+          "type": "single",
+          "steps": [
+            "introduce_import"
+          ]
+        },
+        {
+          "id": "duplicated_code_treatment_14",
+          "label": "treatment_14",
+          "type": "single",
+          "steps": [
+            "widen_or_narrow_definition_scope"
+          ]
+        },
+        {
+          "id": "duplicated_code_treatment_15",
+          "label": "treatment_15",
+          "type": "pipeline",
+          "steps": [
+            "introduce_enum_map_2",
+            "transform_to_list_comprehension",
+            "list_comprehension_simplifications"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "feature_envy",
+      "treatments": [
+        {
+          "id": "feature_envy_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "extract_function",
+            "moving_a_definition"
+          ]
+        },
+        {
+          "id": "feature_envy_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "remove_import_attributes"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "divergent_change",
+      "treatments": [
+        {
+          "id": "divergent_change_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "splitting_a_large_module",
+            "rename_an_identifier"
+          ]
+        },
+        {
+          "id": "divergent_change_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "moving_a_definition"
+          ]
+        },
+        {
+          "id": "divergent_change_treatment_3",
+          "label": "treatment_3",
+          "type": "single",
+          "steps": [
+            "behaviour_extraction"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "inappropriate_intimacy",
+      "treatments": [
+        {
+          "id": "inappropriate_intimacy_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "closure_conversion",
+            "add_or_remove_a_parameter"
+          ]
+        },
+        {
+          "id": "inappropriate_intimacy_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "moving_a_definition"
+          ]
+        },
+        {
+          "id": "inappropriate_intimacy_treatment_3",
+          "label": "treatment_3",
+          "type": "pipeline",
+          "steps": [
+            "splitting_a_large_module",
+            "rename_an_identifier"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "large_class",
+      "treatments": [
+        {
+          "id": "large_class_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "splitting_a_large_module",
+            "rename_an_identifier"
+          ]
+        },
+        {
+          "id": "large_class_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "behaviour_extraction"
+          ]
+        },
+        {
+          "id": "large_class_treatment_3",
+          "label": "treatment_3",
+          "type": "single",
+          "steps": [
+            "moving_a_definition"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "speculative_generality",
+      "treatments": [
+        {
+          "id": "speculative_generality_treatment_1",
+          "label": "treatment_1",
+          "type": "single",
+          "steps": [
+            "inline_function"
+          ]
+        },
+        {
+          "id": "speculative_generality_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "inline_macro"
+          ]
+        },
+        {
+          "id": "speculative_generality_treatment_3",
+          "label": "treatment_3",
+          "type": "single",
+          "steps": [
+            "add_or_remove_a_parameter"
+          ]
+        },
+        {
+          "id": "speculative_generality_treatment_4",
+          "label": "treatment_4",
+          "type": "single",
+          "steps": [
+            "rename_an_identifier"
+          ]
+        },
+        {
+          "id": "speculative_generality_treatment_5",
+          "label": "treatment_5",
+          "type": "single",
+          "steps": [
+            "behaviour_inlining"
+          ]
+        },
+        {
+          "id": "speculative_generality_treatment_6",
+          "label": "treatment_6",
+          "type": "single",
+          "steps": [
+            "remove_dead_code"
+          ]
+        },
+        {
+          "id": "speculative_generality_treatment_7",
+          "label": "treatment_7",
+          "type": "single",
+          "steps": [
+            "eliminate_single_branch"
+          ]
+        }
+      ]
+    },
+    {
+      "smell_id": "switch_statements",
+      "treatments": [
+        {
+          "id": "switch_statements_treatment_1",
+          "label": "treatment_1",
+          "type": "pipeline",
+          "steps": [
+            "replace_conditional_with_polymorphism_via_protocols",
+            "converts_guards_to_conditionals"
+          ]
+        },
+        {
+          "id": "switch_statements_treatment_2",
+          "label": "treatment_2",
+          "type": "single",
+          "steps": [
+            "introduce_pattern_matching_over_a_parameter"
+          ]
+        },
+        {
+          "id": "switch_statements_treatment_3",
+          "label": "treatment_3",
+          "type": "single",
+          "steps": [
+            "introduce_overloading"
+          ]
+        },
+        {
+          "id": "switch_statements_treatment_4",
+          "label": "treatment_4",
+          "type": "pipeline",
+          "steps": [
+            "extract_function",
+            "moving_a_definition",
+            "generalise_a_function_definition",
+            "folding_against_a_function_definition"
+          ]
+        }
+      ]
+    }
+  ]
+}

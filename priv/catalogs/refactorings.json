@@ -1,0 +1,71 @@
+{
+  "refactorings": [
+    {
+      "id": "generalise_a_process_abstraction",
+      "summary": "Transform a specialized process abstraction such as Task or Agent into a more appropriate and more general abstraction, typically GenServer, when the current abstraction is being used beyond its intended purpose.",
+      "motivation": "Elixir provides different process abstractions for distinct purposes. Task and Agent are specialized abstractions with narrow intended uses, while GenServer is a more generic abstraction that can cover the responsibilities of Task and Agent and also support richer state management and communication patterns. This refactoring is useful when Task or Agent starts behaving like a long-running server process, especially with frequent communication with client processes. Applying this refactoring helps remove the GenServer Envy smell and can improve readability by replacing manual message passing and ad hoc looping with clearer GenServer callbacks and API functions.",
+      "intent": "Replace an overstretched Task or Agent with GenServer when the code is implementing long-lived coordination, request-response interactions, or broader server responsibilities than the original abstraction was designed for.",
+      "steps": [
+        "Identify where Task or Agent is being used beyond its intended purpose, especially when it behaves like a long-running server or frequently communicates with other processes.",
+        "Confirm that the process is not simply executing one isolated asynchronous action or merely sharing a simple piece of state.",
+        "Choose GenServer as the more appropriate abstraction for the server-like responsibilities.",
+        "Replace the current abstraction declaration, such as use Task or Agent, with use GenServer.",
+        "Move the looping, message-passing, and coordination logic into GenServer callbacks such as handle_call/3 or handle_cast/2.",
+        "Preserve the existing public API whenever possible so that external behavior does not change.",
+        "Move any internal operation logic, such as query execution or state transitions, into private functions called from the GenServer callbacks.",
+        "Use GenServer.start_link/3 and initialize the process state explicitly.",
+        "Validate that the refactored process still produces the same results for clients.",
+        "Remove manual receive/send recursion that became unnecessary after the migration."
+      ],
+      "example_before": "# Before refactoring:\n\ndefmodule DatabaseServer do\n  use Task\n\n  def start_link() do\n    Task.start_link(&loop/0)\n  end\n\n  defp loop() do\n    receive do\n      {:run_query, caller, query_def} ->\n        send(caller, {:query_result, run_query(query_def)})\n    end\n    loop()\n  end\n\n  def get(server_pid, query_def) do\n    send(server_pid, {:run_query, self(), query_def})\n    receive do\n      {:query_result, result} -> result\n    end\n  end\n\n  defp run_query(query_def) do\n    Process.sleep(1000)\n    \"#{query_def} result\"\n  end\nend\n",
+      "example_after": "# After refactoring:\n\ndefmodule DatabaseServer do\n  use GenServer\n\n  def start_link() do\n    GenServer.start_link(__MODULE__, nil)\n  end\n\n  def get(server_pid, query_def) do\n    GenServer.call(server_pid,{:run_query, query_def})\n  end\n\n  defp run_query(query_def) do\n    Process.sleep(1000)\n    \"#{query_def} result\"\n  end\n\n  @impl\n  def handle_call({:run_query, query_def}, _, state) do\n    {:reply, run_query(query_def), state}\n  end\nend\n"
+    },
+    {
+      "id": "introduce_processes",
+      "summary": "Introduce additional concurrent processes to better distribute work, reduce bottlenecks, and improve scalability and performance.",
+      "motivation": "This refactoring introduces concurrent processes to achieve a more optimal mapping between parallel processes and the parallel activities of the problem being solved. By moving work out of a single overloaded process and allowing multiple worker processes to execute concurrently, the system can avoid bottlenecks, improve scalability, and achieve better performance. It is especially useful when a singleton or centralized process becomes responsible for handling too many requests and its mailbox starts to grow excessively.",
+      "intent": "Refactor a bottlenecked or overly centralized process so that part of its workload is handled by newly introduced concurrent worker processes.",
+      "steps": [
+        "Identify the process that is acting as a bottleneck, especially a singleton or centralized server receiving many requests.",
+        "Find the part of the work that can be executed independently from the main process.",
+        "Extract that work into a separate concurrent process.",
+        "Introduce a suitable abstraction, such as Task, to execute that work concurrently.",
+        "Keep the main process focused on coordination while the new processes perform the heavy or parallelizable work.",
+        "Ensure each introduced process handles isolated work safely and does not break existing behavior.",
+        "Validate that mailbox pressure, latency, or throughput improve after the refactoring."
+      ],
+      "example_before": "# Before refactoring:\n\ndefmodule Todo.Database do\n  use GenServer\n      \n  ...\n\n  def start do\n    GenServer.start(__MODULE__, nil, name: __MODULE__) #<-- Singleton process!\n  end\n\n  def store(key, data) do\n    GenServer.cast(__MODULE__, {:store, key, data})\n  end\n\n  def handle_cast({:store, key, data}, state) do\n    key\n    |> file_name()\n    |> File.write!(:erlang.term_to_binary(data))\n\n    {:noreply, state}\n  end\n      \n  ...\n\nend",
+      "example_after": "# After refactoring:\n    \ndefmodule Todo.Database do\n  use GenServer\n  ...\n\n  def handle_cast({:store, key, data}, state) do\n    Task.start(fn ->     #<-- Concurrency Introduced!\n      key\n      |> file_name()\n      |> File.write!(:erlang.term_to_binary(data))\n    end)\n\n    {:noreply, state}\n  end\n\n  ...\nend"
+    },
+    {
+      "id": "register_a_process",
+      "summary": "Assign a user-defined name to a process and use that name instead of its process ID in message passing.",
+      "motivation": "In Elixir, processes run in an isolated manner, often concurrently with others, and communication between them is performed through message passing. This refactoring makes communication easier and more readable by assigning a user-defined name to a process ID and then using that name instead of the PID. Once a process is registered, any process in the system can communicate with it without needing to know its identifier.",
+      "intent": "Replace direct communication through raw process IDs with communication through a registered process name.",
+      "steps": [
+        "Identify a process that is currently referenced directly by its PID in message passing.",
+        "Choose a meaningful user-defined name for that process.",
+        "Register the process using Process.register/2.",
+        "Replace usages of the PID in send operations or process communication APIs with the registered name.",
+        "Validate that the rest of the system can now communicate with the process through the registered name."
+      ],
+      "example_before": "# Before refactoring:\n\niex(1)> pid = Receiver.create()\n#PID<0.320.0>\n\niex(2)> Sender.send_msg(pid, \"Hello World!\")\nMessage: Hello World!",
+      "example_after": "# After refactoring:\n\niex(1)> pid = Receiver.create()\n#PID<0.320.0>\n\niex(2)> Process.register(pid, :receiver)\n\niex(3)> Sender.send_msg(:receiver, \"Hello World!\")\nMessage: Hello World!"
+    },
+    {
+      "id": "remove_dead_code",
+      "summary": "Eliminate code definitions or fragments that are not used anywhere in the codebase and do not affect the program behavior.",
+      "motivation": "Dead code, that is, unused code, pollutes a codebase, making it longer, noisier, and harder to maintain. This refactoring aims to clean the codebase by removing definitions or fragments that are not being used. In Elixir, the compiler itself may help reveal this situation by warning about unused variables or other unused elements.",
+      "intent": "Clean the codebase by removing unused code that does not contribute to the observable behavior of the system.",
+      "steps": [
+        "Identify code that is not being used, such as unused variables, unused functions, commented-out blocks, or definitions not referenced anywhere else.",
+        "Confirm that the identified code does not affect the observable behavior of the program.",
+        "Remove the dead code fragment or definition.",
+        "Recompile and rerun the relevant tests or usage scenarios to ensure behavior remains unchanged.",
+        "Repeat the cleanup for other unused fragments revealed by compiler warnings or code inspection."
+      ],
+      "example_before": "# Before refactoring:\n\ndefmodule Foo do\n  def bar(v1, v2) do\n    v1 = v1 ** 2\n    v2 = v2 + 5\n    dead_code = v2 / 2  #<= can be removed!\n    {:ok, v1 ** v2}\n  end\nend\n",
+      "example_after": "# After refactoring:\n\ndefmodule Foo do\n  def bar(v1, v2) do\n    v1 = v1 ** 2\n    v2 = v2 + 5\n    {:ok, v1 ** v2}\n  end\nend\n"
+    }
+  ]
+}

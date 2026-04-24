@@ -10,7 +10,7 @@ defmodule SmellLab.Llm.ReqLlmAdapter do
   defp get_model(provider) do
     case provider do
       :google ->
-        System.get_env("LLM_MODEL", "google:gemini-2.5-flash")
+        System.get_env("LLM_MODEL", "google:gemini-3.1-flash-lite-preview")
 
       :ollama ->
         ReqLLM.model!(%{
@@ -71,7 +71,8 @@ defmodule SmellLab.Llm.ReqLlmAdapter do
   defp default_opts(:google) do
     [
       receive_timeout: @default_timeout,
-      max_retries: 0
+      max_retries: 0,
+      max_tokens: 4096
     ]
   end
 
@@ -90,10 +91,66 @@ defmodule SmellLab.Llm.ReqLlmAdapter do
     case result do
       {:ok, response} ->
         Logger.info("ReqLlmAdapter.generate_object success")
-        {:ok, ReqLLM.Response.object(response)}
+
+        case ReqLLM.Response.unwrap_object(response) do
+          {:ok, object} when is_map(object) ->
+            {:ok, object}
+
+          {:ok, other} ->
+            Logger.error("""
+            ReqLlmAdapter.generate_object returned non-map object:
+            #{inspect(other, pretty: true)}
+
+            finish_reason:
+            #{inspect(ReqLLM.Response.finish_reason(response))}
+
+            text:
+            #{ReqLLM.Response.text(response)}
+            """)
+
+            {:error, {:unexpected_object_shape, other}}
+
+          {:error, reason} ->
+            Logger.error("""
+            ReqLlmAdapter.generate_object could not unwrap object:
+            #{inspect(reason, pretty: true)}
+
+            finish_reason:
+            #{inspect(ReqLLM.Response.finish_reason(response))}
+
+            text:
+            #{ReqLLM.Response.text(response)}
+            """)
+
+            {:error, {:object_unwrap_failed, reason}}
+        end
 
       {:error, reason} = error ->
         Logger.error("ReqLlmAdapter.generate_object error: #{inspect(reason, pretty: true)}")
+        error
+    end
+  end
+
+  def generate_text(prompt, opts \\ []) do
+    Logger.info("ReqLlmAdapter.generate_text start")
+
+    model = get_model(@provider)
+
+    merged_opts =
+      Keyword.merge(
+        default_opts(@provider),
+        opts
+      )
+
+    result = ReqLLM.generate_text(model, prompt, merged_opts)
+
+    case result do
+      {:ok, response} ->
+        Logger.info("ReqLlmAdapter.generate_text success")
+        {:ok, ReqLLM.Response.text(response)}
+
+      {:error, reason} = error ->
+        Logger.error("ReqLlmAdapter.generate_text error: #{inspect(reason, pretty: true)}")
         error
     end
   end
